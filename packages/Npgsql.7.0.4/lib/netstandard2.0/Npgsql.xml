@@ -466,6 +466,9 @@
             part of a connection close.
             </summary>
         </member>
+        <member name="M:Npgsql.Internal.NpgsqlConnector.Dispose">
+            <inheritdoc />
+        </member>
         <member name="M:Npgsql.Internal.NpgsqlConnector.UnexpectedMessageReceived(Npgsql.BackendMessageCode)">
             <summary>
             Called when an unexpected message has been received during an action. Breaks the
@@ -540,12 +543,6 @@
             </summary>
             <param name="cmdText">The text of the query.</param>
             <returns>A <see cref="T:Npgsql.NpgsqlCommand"/> object.</returns>
-        </member>
-        <member name="M:Npgsql.Internal.NpgsqlConnector.CreateBatch">
-            <summary>
-            Creates and returns a <see cref="T:Npgsql.NpgsqlBatch"/> object associated with the <see cref="T:Npgsql.Internal.NpgsqlConnector"/>.
-            </summary>
-            <returns>A <see cref="T:Npgsql.NpgsqlBatch"/> object.</returns>
         </member>
         <member name="T:Npgsql.Internal.NpgsqlConnector.GSSPasswordMessageStream">
             <summary>
@@ -877,6 +874,7 @@
         <member name="T:Npgsql.Internal.TypeHandlers.ArrayHandler">
              <summary>
              Non-generic base class for all type handlers which handle PostgreSQL arrays.
+             Extend from <see cref="T:Npgsql.Internal.TypeHandlers.ArrayHandler`1"/> instead.
              </summary>
              <remarks>
              https://www.postgresql.org/docs/current/static/arrays.html.
@@ -885,6 +883,9 @@
              should be considered somewhat unstable, and may change in breaking ways, including in non-major releases.
              Use it at your own risk.
              </remarks>
+        </member>
+        <member name="M:Npgsql.Internal.TypeHandlers.ArrayHandler.#ctor(Npgsql.PostgresTypes.PostgresType,Npgsql.Internal.TypeHandling.NpgsqlTypeHandler,Npgsql.ArrayNullabilityMode,System.Int32)">
+            <inheritdoc />
         </member>
         <member name="M:Npgsql.Internal.TypeHandlers.ArrayHandler.CreateArrayHandler(Npgsql.PostgresTypes.PostgresArrayType,Npgsql.ArrayNullabilityMode)">
             <inheritdoc />
@@ -898,27 +899,46 @@
         <member name="M:Npgsql.Internal.TypeHandlers.ArrayHandler.ReadCustom``1(Npgsql.Internal.NpgsqlReadBuffer,System.Int32,System.Boolean,Npgsql.BackendMessages.FieldDescription)">
             <inheritdoc />
         </member>
-        <member name="M:Npgsql.Internal.TypeHandlers.ArrayHandler.ReadAsObject(Npgsql.Internal.NpgsqlReadBuffer,System.Int32,System.Boolean,Npgsql.BackendMessages.FieldDescription)">
-            <inheritdoc />
-        </member>
-        <member name="M:Npgsql.Internal.TypeHandlers.ArrayHandler.ValidateObjectAndGetLength(System.Object,Npgsql.Internal.TypeHandling.NpgsqlLengthCache@,Npgsql.NpgsqlParameter)">
-            <inheritdoc />
-        </member>
-        <member name="M:Npgsql.Internal.TypeHandlers.ArrayHandler.ValidateAndGetLengthCustom``1(``0,Npgsql.Internal.TypeHandling.NpgsqlLengthCache@,Npgsql.NpgsqlParameter)">
-            <inheritdoc />
-        </member>
-        <member name="M:Npgsql.Internal.TypeHandlers.ArrayHandler.WriteObjectWithLength(System.Object,Npgsql.Internal.NpgsqlWriteBuffer,Npgsql.Internal.TypeHandling.NpgsqlLengthCache,Npgsql.NpgsqlParameter,System.Boolean,System.Threading.CancellationToken)">
-            <inheritdoc />
-        </member>
-        <member name="M:Npgsql.Internal.TypeHandlers.ArrayHandlerCore.ReadArray(Npgsql.Internal.NpgsqlReadBuffer,System.Boolean,System.Int32,System.Boolean)">
+        <member name="M:Npgsql.Internal.TypeHandlers.ArrayHandler.ReadArray``1(Npgsql.Internal.NpgsqlReadBuffer,System.Boolean,System.Int32,System.Boolean)">
             <summary>
-            Reads an array of element type from the given buffer <paramref name="buf"/>.
+            Reads an array of element type <typeparamref name="TRequestedElement"/> from the given buffer <paramref name="buf"/>.
             </summary>
         </member>
-        <member name="M:Npgsql.Internal.TypeHandlers.ArrayHandlerCore.ReadList(Npgsql.Internal.NpgsqlReadBuffer,System.Boolean)">
+        <member name="M:Npgsql.Internal.TypeHandlers.ArrayHandler.ReadList``1(Npgsql.Internal.NpgsqlReadBuffer,System.Boolean)">
             <summary>
-            Reads a generic list containing elements from the given buffer <paramref name="buf"/>.
+            Reads a generic list containing elements of type <typeparamref name="TRequestedElement"/> from the given buffer <paramref name="buf"/>.
             </summary>
+        </member>
+        <member name="T:Npgsql.Internal.TypeHandlers.ArrayHandler`1">
+             <summary>
+             Base class for all type handlers which handle PostgreSQL arrays.
+             </summary>
+             <remarks>
+             https://www.postgresql.org/docs/current/static/arrays.html.
+            
+             The type handler API allows customizing Npgsql's behavior in powerful ways. However, although it is public, it
+             should be considered somewhat unstable, and may change in breaking ways, including in non-major releases.
+             Use it at your own risk.
+             </remarks>
+        </member>
+        <member name="M:Npgsql.Internal.TypeHandlers.ArrayHandler`1.#ctor(Npgsql.PostgresTypes.PostgresType,Npgsql.Internal.TypeHandling.NpgsqlTypeHandler,Npgsql.ArrayNullabilityMode,System.Int32)">
+            <inheritdoc />
+        </member>
+        <member name="M:Npgsql.Internal.TypeHandlers.ArrayHandler`1.ValidateAndGetLengthCustom``1(``0,Npgsql.Internal.TypeHandling.NpgsqlLengthCache@,Npgsql.NpgsqlParameter)">
+            <inheritdoc />
+        </member>
+        <member name="M:Npgsql.Internal.TypeHandlers.ArrayHandler`1.ValidateObjectAndGetLength(System.Object,Npgsql.Internal.TypeHandling.NpgsqlLengthCache@,Npgsql.NpgsqlParameter)">
+            <inheritdoc />
+        </member>
+        <member name="M:Npgsql.Internal.TypeHandlers.ArrayHandler`1.WriteObjectWithLength(System.Object,Npgsql.Internal.NpgsqlWriteBuffer,Npgsql.Internal.TypeHandling.NpgsqlLengthCache,Npgsql.NpgsqlParameter,System.Boolean,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="T:Npgsql.Internal.TypeHandlers.ArrayHandlerWithPsv`2">
+            <remarks>
+            https://www.postgresql.org/docs/current/static/arrays.html
+            </remarks>
+            <typeparam name="TElement">The .NET type contained as an element within this array</typeparam>
+            <typeparam name="TElementPsv">The .NET provider-specific type contained as an element within this array</typeparam>
         </member>
         <member name="T:Npgsql.Internal.TypeHandlers.BitStringHandler">
              <summary>
@@ -980,6 +1000,9 @@
         <member name="M:Npgsql.Internal.TypeHandlers.BitStringArrayHandler.#ctor(Npgsql.PostgresTypes.PostgresType,Npgsql.Internal.TypeHandlers.BitStringHandler,Npgsql.ArrayNullabilityMode)">
             <inheritdoc />
         </member>
+        <member name="M:Npgsql.Internal.TypeHandlers.BitStringArrayHandler.ReadCustom``1(Npgsql.Internal.NpgsqlReadBuffer,System.Int32,System.Boolean,Npgsql.BackendMessages.FieldDescription)">
+            <inheritdoc />
+        </member>
         <member name="T:Npgsql.Internal.TypeHandlers.BoolHandler">
              <summary>
              A type handler for the PostgreSQL bool data type.
@@ -1032,18 +1055,6 @@
             <inheritdoc />
         </member>
         <member name="M:Npgsql.Internal.TypeHandlers.ByteaHandler.Write(System.IO.Stream,Npgsql.Internal.NpgsqlWriteBuffer,Npgsql.Internal.TypeHandling.NpgsqlLengthCache,Npgsql.NpgsqlParameter,System.Boolean,System.Threading.CancellationToken)">
-            <inheritdoc />
-        </member>
-        <member name="M:Npgsql.Internal.TypeHandlers.ByteaHandler.ValidateAndGetLength(System.Memory{System.Byte},Npgsql.Internal.TypeHandling.NpgsqlLengthCache@,Npgsql.NpgsqlParameter)">
-            <inheritdoc />
-        </member>
-        <member name="M:Npgsql.Internal.TypeHandlers.ByteaHandler.ValidateAndGetLength(System.ReadOnlyMemory{System.Byte},Npgsql.Internal.TypeHandling.NpgsqlLengthCache@,Npgsql.NpgsqlParameter)">
-            <inheritdoc />
-        </member>
-        <member name="M:Npgsql.Internal.TypeHandlers.ByteaHandler.Write(System.ReadOnlyMemory{System.Byte},Npgsql.Internal.NpgsqlWriteBuffer,Npgsql.Internal.TypeHandling.NpgsqlLengthCache,Npgsql.NpgsqlParameter,System.Boolean,System.Threading.CancellationToken)">
-            <inheritdoc />
-        </member>
-        <member name="M:Npgsql.Internal.TypeHandlers.ByteaHandler.Write(System.Memory{System.Byte},Npgsql.Internal.NpgsqlWriteBuffer,Npgsql.Internal.TypeHandling.NpgsqlLengthCache,Npgsql.NpgsqlParameter,System.Boolean,System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="P:Npgsql.Internal.TypeHandlers.CompositeHandlers.ICompositeHandler.CompositeType">
@@ -1493,9 +1504,6 @@
         <member name="M:Npgsql.Internal.TypeHandlers.HstoreHandler.ValidateAndGetLength(System.Collections.Generic.IDictionary{System.String,System.String},Npgsql.Internal.TypeHandling.NpgsqlLengthCache@,Npgsql.NpgsqlParameter)">
             <inheritdoc />
         </member>
-        <member name="M:Npgsql.Internal.TypeHandlers.HstoreHandler.ValidateAndGetLength(System.Collections.Immutable.ImmutableDictionary{System.String,System.String},Npgsql.Internal.TypeHandling.NpgsqlLengthCache@,Npgsql.NpgsqlParameter)">
-            <inheritdoc />
-        </member>
         <member name="M:Npgsql.Internal.TypeHandlers.HstoreHandler.ValidateAndGetLength(System.Collections.Generic.Dictionary{System.String,System.String},Npgsql.Internal.TypeHandling.NpgsqlLengthCache@,Npgsql.NpgsqlParameter)">
             <inheritdoc />
         </member>
@@ -1506,9 +1514,6 @@
             <inheritdoc />
         </member>
         <member name="M:Npgsql.Internal.TypeHandlers.HstoreHandler.Write(System.Collections.Generic.IDictionary{System.String,System.String},Npgsql.Internal.NpgsqlWriteBuffer,Npgsql.Internal.TypeHandling.NpgsqlLengthCache,Npgsql.NpgsqlParameter,System.Boolean,System.Threading.CancellationToken)">
-            <inheritdoc />
-        </member>
-        <member name="M:Npgsql.Internal.TypeHandlers.HstoreHandler.Write(System.Collections.Immutable.ImmutableDictionary{System.String,System.String},Npgsql.Internal.NpgsqlWriteBuffer,Npgsql.Internal.TypeHandling.NpgsqlLengthCache,Npgsql.NpgsqlParameter,System.Boolean,System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="M:Npgsql.Internal.TypeHandlers.HstoreHandler.Write(System.Collections.Generic.Dictionary{System.String,System.String},Npgsql.Internal.NpgsqlWriteBuffer,Npgsql.Internal.TypeHandling.NpgsqlLengthCache,Npgsql.NpgsqlParameter,System.Boolean,System.Threading.CancellationToken)">
@@ -1574,6 +1579,53 @@
             be 0 (we send 1 for regular arrays).
             </summary>
         </member>
+        <member name="T:Npgsql.Internal.TypeHandlers.JsonHandler">
+             <summary>
+             A type handler for the PostgreSQL json and jsonb data type.
+             </summary>
+             <remarks>
+             See https://www.postgresql.org/docs/current/datatype-json.html.
+            
+             The type handler API allows customizing Npgsql's behavior in powerful ways. However, although it is public, it
+             should be considered somewhat unstable, and may change in breaking ways, including in non-major releases.
+             Use it at your own risk.
+             </remarks>
+        </member>
+        <member name="F:Npgsql.Internal.TypeHandlers.JsonHandler.JsonbProtocolVersion">
+            <summary>
+            Prepended to the string in the wire encoding
+            </summary>
+        </member>
+        <member name="M:Npgsql.Internal.TypeHandlers.JsonHandler.#ctor(Npgsql.PostgresTypes.PostgresType,System.Text.Encoding,System.Boolean,System.Text.Json.JsonSerializerOptions)">
+            <inheritdoc />
+        </member>
+        <member name="M:Npgsql.Internal.TypeHandlers.JsonHandler.ValidateAndGetLengthCustom``1(``0,Npgsql.Internal.TypeHandling.NpgsqlLengthCache@,Npgsql.NpgsqlParameter)">
+            <inheritdoc />
+        </member>
+        <member name="M:Npgsql.Internal.TypeHandlers.JsonHandler.WriteWithLengthCustom``1(``0,Npgsql.Internal.NpgsqlWriteBuffer,Npgsql.Internal.TypeHandling.NpgsqlLengthCache,Npgsql.NpgsqlParameter,System.Boolean,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:Npgsql.Internal.TypeHandlers.JsonHandler.ValidateAndGetLength(System.String,Npgsql.Internal.TypeHandling.NpgsqlLengthCache@,Npgsql.NpgsqlParameter)">
+            <inheritdoc />
+        </member>
+        <member name="M:Npgsql.Internal.TypeHandlers.JsonHandler.Write(System.String,Npgsql.Internal.NpgsqlWriteBuffer,Npgsql.Internal.TypeHandling.NpgsqlLengthCache,Npgsql.NpgsqlParameter,System.Boolean,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:Npgsql.Internal.TypeHandlers.JsonHandler.ValidateObjectAndGetLength(System.Object,Npgsql.Internal.TypeHandling.NpgsqlLengthCache@,Npgsql.NpgsqlParameter)">
+            <inheritdoc />
+        </member>
+        <member name="M:Npgsql.Internal.TypeHandlers.JsonHandler.WriteObjectWithLength(System.Object,Npgsql.Internal.NpgsqlWriteBuffer,Npgsql.Internal.TypeHandling.NpgsqlLengthCache,Npgsql.NpgsqlParameter,System.Boolean,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:Npgsql.Internal.TypeHandlers.JsonHandler.ReadCustom``1(Npgsql.Internal.NpgsqlReadBuffer,System.Int32,System.Boolean,Npgsql.BackendMessages.FieldDescription)">
+            <inheritdoc />
+        </member>
+        <member name="M:Npgsql.Internal.TypeHandlers.JsonHandler.Read(Npgsql.Internal.NpgsqlReadBuffer,System.Int32,System.Boolean,Npgsql.BackendMessages.FieldDescription)">
+            <inheritdoc />
+        </member>
+        <member name="M:Npgsql.Internal.TypeHandlers.JsonHandler.GetTextReader(System.IO.Stream,Npgsql.Internal.NpgsqlReadBuffer)">
+            <inheritdoc />
+        </member>
         <member name="T:Npgsql.Internal.TypeHandlers.JsonPathHandler">
              <summary>
              A type handler for the PostgreSQL jsonpath data type.
@@ -1604,51 +1656,6 @@
             <inheritdoc />
         </member>
         <member name="M:Npgsql.Internal.TypeHandlers.JsonPathHandler.GetTextReader(System.IO.Stream,Npgsql.Internal.NpgsqlReadBuffer)">
-            <inheritdoc />
-        </member>
-        <member name="T:Npgsql.Internal.TypeHandlers.JsonTextHandler">
-             <summary>
-             A text-only type handler for the PostgreSQL json and jsonb data type. This handler does not support serialization/deserialization
-             with System.Text.Json or Json.NET.
-             </summary>
-             <remarks>
-             See https://www.postgresql.org/docs/current/datatype-json.html.
-            
-             The type handler API allows customizing Npgsql's behavior in powerful ways. However, although it is public, it
-             should be considered somewhat unstable, and may change in breaking ways, including in non-major releases.
-             Use it at your own risk.
-             </remarks>
-        </member>
-        <member name="F:Npgsql.Internal.TypeHandlers.JsonTextHandler.JsonbProtocolVersion">
-            <summary>
-            Prepended to the string in the wire encoding
-            </summary>
-        </member>
-        <member name="M:Npgsql.Internal.TypeHandlers.JsonTextHandler.#ctor(Npgsql.PostgresTypes.PostgresType,System.Text.Encoding,System.Boolean)">
-            <inheritdoc />
-        </member>
-        <member name="M:Npgsql.Internal.TypeHandlers.JsonTextHandler.ValidateAndGetLengthCustom``1(``0,Npgsql.Internal.TypeHandling.NpgsqlLengthCache@,Npgsql.NpgsqlParameter)">
-            <inheritdoc />
-        </member>
-        <member name="M:Npgsql.Internal.TypeHandlers.JsonTextHandler.ValidateAndGetLength(System.String,Npgsql.Internal.TypeHandling.NpgsqlLengthCache@,Npgsql.NpgsqlParameter)">
-            <inheritdoc />
-        </member>
-        <member name="M:Npgsql.Internal.TypeHandlers.JsonTextHandler.Write(System.String,Npgsql.Internal.NpgsqlWriteBuffer,Npgsql.Internal.TypeHandling.NpgsqlLengthCache,Npgsql.NpgsqlParameter,System.Boolean,System.Threading.CancellationToken)">
-            <inheritdoc />
-        </member>
-        <member name="M:Npgsql.Internal.TypeHandlers.JsonTextHandler.ValidateObjectAndGetLength(System.Object,Npgsql.Internal.TypeHandling.NpgsqlLengthCache@,Npgsql.NpgsqlParameter)">
-            <inheritdoc />
-        </member>
-        <member name="M:Npgsql.Internal.TypeHandlers.JsonTextHandler.WriteObjectWithLength(System.Object,Npgsql.Internal.NpgsqlWriteBuffer,Npgsql.Internal.TypeHandling.NpgsqlLengthCache,Npgsql.NpgsqlParameter,System.Boolean,System.Threading.CancellationToken)">
-            <inheritdoc />
-        </member>
-        <member name="M:Npgsql.Internal.TypeHandlers.JsonTextHandler.ReadCustom``1(Npgsql.Internal.NpgsqlReadBuffer,System.Int32,System.Boolean,Npgsql.BackendMessages.FieldDescription)">
-            <inheritdoc />
-        </member>
-        <member name="M:Npgsql.Internal.TypeHandlers.JsonTextHandler.Read(Npgsql.Internal.NpgsqlReadBuffer,System.Int32,System.Boolean,Npgsql.BackendMessages.FieldDescription)">
-            <inheritdoc />
-        </member>
-        <member name="M:Npgsql.Internal.TypeHandlers.JsonTextHandler.GetTextReader(System.IO.Stream,Npgsql.Internal.NpgsqlReadBuffer)">
             <inheritdoc />
         </member>
         <member name="T:Npgsql.Internal.TypeHandlers.LTreeHandlers.LQueryHandler">
@@ -1687,15 +1694,6 @@
             </summary>
         </member>
         <member name="M:Npgsql.Internal.TypeHandlers.MultirangeHandler`1.#ctor(Npgsql.PostgresTypes.PostgresMultirangeType,Npgsql.Internal.TypeHandlers.RangeHandler{`0})">
-            <inheritdoc />
-        </member>
-        <member name="M:Npgsql.Internal.TypeHandlers.MultirangeHandler`1.CreateArrayHandler(Npgsql.PostgresTypes.PostgresArrayType,Npgsql.ArrayNullabilityMode)">
-            <inheritdoc />
-        </member>
-        <member name="M:Npgsql.Internal.TypeHandlers.MultirangeHandler`1.CreateRangeHandler(Npgsql.PostgresTypes.PostgresType)">
-            <inheritdoc />
-        </member>
-        <member name="M:Npgsql.Internal.TypeHandlers.MultirangeHandler`1.CreateMultirangeHandler(Npgsql.PostgresTypes.PostgresMultirangeType)">
             <inheritdoc />
         </member>
         <member name="M:Npgsql.Internal.TypeHandlers.MultirangeHandler`2.#ctor(Npgsql.PostgresTypes.PostgresMultirangeType,Npgsql.Internal.TypeHandlers.RangeHandler{`0,`1})">
@@ -1743,7 +1741,7 @@
         <member name="M:Npgsql.Internal.TypeHandlers.NetworkHandlers.InetHandler.Read(Npgsql.Internal.NpgsqlReadBuffer,System.Int32,Npgsql.BackendMessages.FieldDescription)">
             <inheritdoc />
         </member>
-        <member name="M:Npgsql.Internal.TypeHandlers.NetworkHandlers.InetHandler.Npgsql#Internal#TypeHandling#INpgsqlSimpleTypeHandler{(System#Net#IPAddressAddress,System#Int32Subnet)}#Read(Npgsql.Internal.NpgsqlReadBuffer,System.Int32,Npgsql.BackendMessages.FieldDescription)">
+        <member name="M:Npgsql.Internal.TypeHandlers.NetworkHandlers.InetHandler.ReadPsv(Npgsql.Internal.NpgsqlReadBuffer,System.Int32,Npgsql.BackendMessages.FieldDescription)">
             <inheritdoc />
         </member>
         <member name="M:Npgsql.Internal.TypeHandlers.NetworkHandlers.InetHandler.ValidateAndGetLength(System.Net.IPAddress,Npgsql.NpgsqlParameter)">
@@ -2201,41 +2199,6 @@
         <member name="M:Npgsql.Internal.TypeHandlers.RecordHandler.CreateMultirangeHandler(Npgsql.PostgresTypes.PostgresMultirangeType)">
             <inheritdoc />
         </member>
-        <member name="T:Npgsql.Internal.TypeHandlers.SystemTextJsonHandler">
-             <summary>
-             A type handler for the PostgreSQL json and jsonb data type which uses System.Text.Json.
-             </summary>
-             <remarks>
-             See https://www.postgresql.org/docs/current/datatype-json.html.
-            
-             The type handler API allows customizing Npgsql's behavior in powerful ways. However, although it is public, it
-             should be considered somewhat unstable, and may change in breaking ways, including in non-major releases.
-             Use it at your own risk.
-             </remarks>
-        </member>
-        <member name="F:Npgsql.Internal.TypeHandlers.SystemTextJsonHandler.JsonbProtocolVersion">
-            <summary>
-            Prepended to the string in the wire encoding
-            </summary>
-        </member>
-        <member name="M:Npgsql.Internal.TypeHandlers.SystemTextJsonHandler.#ctor(Npgsql.PostgresTypes.PostgresType,System.Text.Encoding,System.Boolean,System.Text.Json.JsonSerializerOptions)">
-            <inheritdoc />
-        </member>
-        <member name="M:Npgsql.Internal.TypeHandlers.SystemTextJsonHandler.ValidateAndGetLengthCustom``1(``0,Npgsql.Internal.TypeHandling.NpgsqlLengthCache@,Npgsql.NpgsqlParameter)">
-            <inheritdoc />
-        </member>
-        <member name="M:Npgsql.Internal.TypeHandlers.SystemTextJsonHandler.WriteWithLengthCustom``1(``0,Npgsql.Internal.NpgsqlWriteBuffer,Npgsql.Internal.TypeHandling.NpgsqlLengthCache,Npgsql.NpgsqlParameter,System.Boolean,System.Threading.CancellationToken)">
-            <inheritdoc />
-        </member>
-        <member name="M:Npgsql.Internal.TypeHandlers.SystemTextJsonHandler.ValidateObjectAndGetLength(System.Object,Npgsql.Internal.TypeHandling.NpgsqlLengthCache@,Npgsql.NpgsqlParameter)">
-            <inheritdoc />
-        </member>
-        <member name="M:Npgsql.Internal.TypeHandlers.SystemTextJsonHandler.WriteObjectWithLength(System.Object,Npgsql.Internal.NpgsqlWriteBuffer,Npgsql.Internal.TypeHandling.NpgsqlLengthCache,Npgsql.NpgsqlParameter,System.Boolean,System.Threading.CancellationToken)">
-            <inheritdoc />
-        </member>
-        <member name="M:Npgsql.Internal.TypeHandlers.SystemTextJsonHandler.ReadCustom``1(Npgsql.Internal.NpgsqlReadBuffer,System.Int32,System.Boolean,Npgsql.BackendMessages.FieldDescription)">
-            <inheritdoc />
-        </member>
         <member name="T:Npgsql.Internal.TypeHandlers.TextHandler">
              <summary>
              A type handler for PostgreSQL character data types (text, char, varchar, xml...).
@@ -2269,9 +2232,6 @@
         <member name="M:Npgsql.Internal.TypeHandlers.TextHandler.ValidateAndGetLength(System.Byte[],Npgsql.Internal.TypeHandling.NpgsqlLengthCache@,Npgsql.NpgsqlParameter)">
             <inheritdoc />
         </member>
-        <member name="M:Npgsql.Internal.TypeHandlers.TextHandler.ValidateAndGetLength(System.ReadOnlyMemory{System.Byte},Npgsql.Internal.TypeHandling.NpgsqlLengthCache@,Npgsql.NpgsqlParameter)">
-            <inheritdoc />
-        </member>
         <member name="M:Npgsql.Internal.TypeHandlers.TextHandler.Write(System.String,Npgsql.Internal.NpgsqlWriteBuffer,Npgsql.Internal.TypeHandling.NpgsqlLengthCache,Npgsql.NpgsqlParameter,System.Boolean,System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
@@ -2282,6 +2242,9 @@
             <inheritdoc />
         </member>
         <member name="M:Npgsql.Internal.TypeHandlers.TextHandler.Write(System.Char,Npgsql.Internal.NpgsqlWriteBuffer,Npgsql.Internal.TypeHandling.NpgsqlLengthCache,Npgsql.NpgsqlParameter,System.Boolean,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:Npgsql.Internal.TypeHandlers.TextHandler.Write(System.Byte[],Npgsql.Internal.NpgsqlWriteBuffer,Npgsql.Internal.TypeHandling.NpgsqlLengthCache,Npgsql.NpgsqlParameter,System.Boolean,System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="M:Npgsql.Internal.TypeHandlers.TextHandler.GetTextReader(System.IO.Stream,Npgsql.Internal.NpgsqlReadBuffer)">
@@ -2501,6 +2464,72 @@
             Simple type handlers override <see cref="M:Npgsql.Internal.TypeHandling.NpgsqlSimpleTypeHandler`1.ValidateAndGetLength(`0,Npgsql.NpgsqlParameter)"/> instead of this.
             </summary>
         </member>
+        <member name="T:Npgsql.Internal.TypeHandling.NpgsqlSimpleTypeHandlerWithPsv`2">
+            <summary>
+            A simple type handler that supports a provider-specific value in addition to its default value.
+            This is necessary mainly in cases where the CLR type cannot represent the full range of the PostgreSQL type, and a custom CLR type
+            is needed. The provider-specific type <typeparamref name="TPsv"/> will be returned from calls to
+            <see cref="M:System.Data.Common.DbDataReader.GetProviderSpecificValue(System.Int32)"/>.
+            </summary>
+            <typeparam name="TDefault">
+            The default CLR type that this handler will read and write. For example, calling <see cref="M:System.Data.Common.DbDataReader.GetValue(System.Int32)"/>
+            on a column with this handler will return a value with type <typeparamref name="TDefault"/>.
+            Type handlers can support additional types by implementing <see cref="T:Npgsql.Internal.TypeHandling.INpgsqlTypeHandler`1"/>.
+            </typeparam>
+            <typeparam name="TPsv">The provider-specific CLR type that this handler will read and write.</typeparam>
+        </member>
+        <member name="M:Npgsql.Internal.TypeHandling.NpgsqlSimpleTypeHandlerWithPsv`2.ReadPsv(Npgsql.Internal.NpgsqlReadBuffer,System.Int32,Npgsql.BackendMessages.FieldDescription)">
+            <summary>
+            Reads a value of type <typeparamref name="TPsv"/> with the given length from the provided buffer,
+            with the assumption that it is entirely present in the provided memory buffer and no I/O will be
+            required.
+            </summary>
+            <param name="buf">The buffer from which to read.</param>
+            <param name="len">The byte length of the value. The buffer might not contain the full length, requiring I/O to be performed.</param>
+            <param name="fieldDescription">Additional PostgreSQL information about the type, such as the length in varchar(30).</param>
+            <returns>The fully-read value.</returns>
+        </member>
+        <member name="M:Npgsql.Internal.TypeHandling.NpgsqlSimpleTypeHandlerWithPsv`2.ReadPsvAsObject(Npgsql.Internal.NpgsqlReadBuffer,System.Int32,Npgsql.BackendMessages.FieldDescription)">
+            <summary>
+            Reads a column as the type handler's provider-specific type, assuming that it is already entirely
+            in memory (i.e. no I/O is necessary). Called by <see cref="T:Npgsql.NpgsqlDataReader"/> in non-sequential mode, which
+            buffers entire rows in memory.
+            </summary>
+        </member>
+        <member name="M:Npgsql.Internal.TypeHandling.NpgsqlSimpleTypeHandlerWithPsv`2.ReadPsvAsObject(Npgsql.Internal.NpgsqlReadBuffer,System.Int32,System.Boolean,Npgsql.BackendMessages.FieldDescription)">
+            <summary>
+            Reads a column as the type handler's provider-specific type. If it is not already entirely in
+            memory, sync or async I/O will be performed as specified by <paramref name="async"/>.
+            </summary>
+        </member>
+        <member name="M:Npgsql.Internal.TypeHandling.NpgsqlSimpleTypeHandlerWithPsv`2.ValidateAndGetLength(`1,Npgsql.NpgsqlParameter)">
+            <summary>
+            Responsible for validating that a value represents a value of the correct and which can be
+            written for PostgreSQL - if the value cannot be written for any reason, an exception shold be thrown.
+            Also returns the byte length needed to write the value.
+            </summary>
+            <param name="value">The value to be written to PostgreSQL</param>
+            <param name="parameter">
+            The <see cref="T:Npgsql.NpgsqlParameter"/> instance where this value resides. Can be used to access additional
+            information relevant to the write process (e.g. <see cref="P:Npgsql.NpgsqlParameter.Size"/>).
+            </param>
+            <returns>The number of bytes required to write the value.</returns>
+        </member>
+        <member name="M:Npgsql.Internal.TypeHandling.NpgsqlSimpleTypeHandlerWithPsv`2.Write(`1,Npgsql.Internal.NpgsqlWriteBuffer,Npgsql.NpgsqlParameter)">
+            <summary>
+            Writes a value to the provided buffer, with the assumption that there is enough space in the buffer
+            (no I/O will occur). The Npgsql core will have taken care of that.
+            </summary>
+            <param name="value">The value to write.</param>
+            <param name="buf">The buffer to which to write.</param>
+            <param name="parameter">
+            The <see cref="T:Npgsql.NpgsqlParameter"/> instance where this value resides. Can be used to access additional
+            information relevant to the write process (e.g. <see cref="P:Npgsql.NpgsqlParameter.Size"/>).
+            </param>
+        </member>
+        <member name="M:Npgsql.Internal.TypeHandling.NpgsqlSimpleTypeHandlerWithPsv`2.CreateArrayHandler(Npgsql.PostgresTypes.PostgresArrayType,Npgsql.ArrayNullabilityMode)">
+            <inheeritdoc />
+        </member>
         <member name="T:Npgsql.Internal.TypeHandling.NpgsqlTypeHandler">
             <summary>
             Base class for all type handlers, which read and write CLR types into their PostgreSQL
@@ -2540,6 +2569,18 @@
         <member name="M:Npgsql.Internal.TypeHandling.NpgsqlTypeHandler.ReadAsObject(Npgsql.Internal.NpgsqlReadBuffer,System.Int32,Npgsql.BackendMessages.FieldDescription)">
             <summary>
             Version of <see cref="M:Npgsql.Internal.TypeHandling.NpgsqlTypeHandler.ReadAsObject(Npgsql.Internal.NpgsqlReadBuffer,System.Int32,System.Boolean,Npgsql.BackendMessages.FieldDescription)"/> that's called when we know the entire value
+            is already buffered in memory (i.e. in non-sequential mode).
+            </summary>
+        </member>
+        <member name="M:Npgsql.Internal.TypeHandling.NpgsqlTypeHandler.ReadPsvAsObject(Npgsql.Internal.NpgsqlReadBuffer,System.Int32,System.Boolean,Npgsql.BackendMessages.FieldDescription)">
+            <summary>
+            Reads a column as the type handler's provider-specific type. If it is not already entirely in
+            memory, sync or async I/O will be performed as specified by <paramref name="async"/>.
+            </summary>
+        </member>
+        <member name="M:Npgsql.Internal.TypeHandling.NpgsqlTypeHandler.ReadPsvAsObject(Npgsql.Internal.NpgsqlReadBuffer,System.Int32,Npgsql.BackendMessages.FieldDescription)">
+            <summary>
+            Version of <see cref="M:Npgsql.Internal.TypeHandling.NpgsqlTypeHandler.ReadPsvAsObject(Npgsql.Internal.NpgsqlReadBuffer,System.Int32,System.Boolean,Npgsql.BackendMessages.FieldDescription)"/> that's called when we know the entire value
             is already buffered in memory (i.e. in non-sequential mode).
             </summary>
         </member>
@@ -2679,48 +2720,12 @@
             </summary>
             <remarks>See <see href="https://www.postgresql.org/docs/current/catalog-pg-type.html" />.</remarks>
         </member>
-        <member name="M:Npgsql.Internal.TypeHandling.TypeHandlerResolver.ResolveByNpgsqlDbType(NpgsqlTypes.NpgsqlDbType)">
-            <summary>
-            Resolves a type handler for a given NpgsqlDbType.
-            </summary>
-        </member>
         <member name="M:Npgsql.Internal.TypeHandling.TypeHandlerResolver.ResolveByClrType(System.Type)">
             <summary>
             Resolves a type handler given a .NET CLR type.
             </summary>
         </member>
-        <member name="M:Npgsql.Internal.TypeHandling.TypeHandlerResolver.ResolveByPostgresType(Npgsql.PostgresTypes.PostgresType)">
-            <summary>
-            Resolves a type handler given a PostgreSQL type.
-            </summary>
-        </member>
-        <member name="T:Npgsql.Internal.TypeMapping.TypeMapper">
-            <summary>
-            Type mapper used to map types to type handlers.
-            </summary>
-        </member>
-        <member name="M:Npgsql.Internal.TypeMapping.TypeMapper.ResolveByOID(System.UInt32)">
-            <summary>
-            Looks up a type handler by its PostgreSQL type's OID.
-            </summary>
-            <param name="oid">A PostgreSQL type OID</param>
-            <returns>A type handler that can be used to encode and decode values.</returns>
-        </member>
-        <member name="M:Npgsql.Internal.TypeMapping.TypeMapper.ResolveByNpgsqlDbType(NpgsqlTypes.NpgsqlDbType)">
-            <summary>
-            Looks up a type handler by NpgsqlDbType.
-            </summary>
-            <param name="npgsqlDbType">Parameter's NpgsqlDbType</param>
-            <returns>A type handler that can be used to encode and decode values.</returns>
-        </member>
-        <member name="M:Npgsql.Internal.TypeMapping.TypeMapper.ResolveByClrType(System.Type)">
-            <summary>
-            Looks up a type handler by CLR Type.
-            </summary>
-            <param name="type">Parameter's CLR type</param>
-            <returns>A type handler that can be used to encode and decode values.</returns>
-        </member>
-        <member name="M:Npgsql.Internal.TypeMapping.TypeMappingResolver.GetMappingByPostgresType(Npgsql.Internal.TypeMapping.TypeMapper,Npgsql.PostgresTypes.PostgresType)">
+        <member name="M:Npgsql.Internal.TypeHandling.TypeHandlerResolver.GetMappingByDataTypeName(System.String)">
             <summary>
             Gets type mapping information for a given PostgreSQL type.
             Invoked in scenarios when mapping information is required, rather than a type handler for reading or writing.
@@ -2918,9 +2923,6 @@
         <member name="M:Npgsql.NpgsqlBatch.Cancel">
             <inheritdoc />
         </member>
-        <member name="M:Npgsql.NpgsqlBatch.Dispose">
-            <inheritdoc />
-        </member>
         <member name="T:Npgsql.NpgsqlBatchCommand">
             <inheritdoc/>
         </member>
@@ -3097,7 +3099,7 @@
             <inheritdoc/>
         </member>
         <member name="P:Npgsql.NpgsqlBatchCommandCollection.Item(System.Int32)">
-            <inheritdoc cref="P:System.Collections.Generic.IList`1.Item(System.Int32)" />
+            <inheritdoc/>
         </member>
         <member name="M:Npgsql.NpgsqlBatchCommandCollection.GetBatchCommand(System.Int32)">
             <inheritdoc/>
@@ -3452,7 +3454,7 @@
             Is only populated when an Execute* method is called.
             </summary>
         </member>
-        <member name="P:Npgsql.NpgsqlCommand.IsCacheable">
+        <member name="P:Npgsql.NpgsqlCommand.IsCached">
             <summary>
             Whether this command is cached by <see cref="T:Npgsql.NpgsqlConnection" /> and returned by <see cref="M:Npgsql.NpgsqlConnection.CreateCommand" />.
             </summary>
@@ -3975,6 +3977,11 @@
             The parsed connection string. Set only after the connection is opened.
             </summary>
         </member>
+        <member name="P:Npgsql.NpgsqlConnection.CachedCommand">
+            <summary>
+            A cached command handed out by <see cref="M:Npgsql.NpgsqlConnection.CreateCommand" />, which is returned when disposed. Useful for reducing allocations.
+            </summary>
+        </member>
         <member name="F:Npgsql.NpgsqlConnection._closing">
             <summary>
             Flag used to make sure we never double-close a connection, returning it twice to the pool.
@@ -4085,7 +4092,7 @@
             Gets the time (in seconds) to wait while trying to execute a command
             before terminating the attempt and generating an error.
             </summary>
-            <value>The time (in seconds) to wait for a command to complete. The default value is 30 seconds.</value>
+            <value>The time (in seconds) to wait for a command to complete. The default value is 20 seconds.</value>
         </member>
         <member name="P:Npgsql.NpgsqlConnection.Database">
             <summary>
@@ -4125,11 +4132,6 @@
             </summary>
             <value>ConnectionState.Open, ConnectionState.Closed or ConnectionState.Connecting</value>
         </member>
-        <member name="P:Npgsql.NpgsqlConnection.CachedCommand">
-            <summary>
-            A cached command handed out by <see cref="M:Npgsql.NpgsqlConnection.CreateCommand" />, which is returned when disposed. Useful for reducing allocations.
-            </summary>
-        </member>
         <member name="M:Npgsql.NpgsqlConnection.CreateDbCommand">
             <summary>
             Creates and returns a <see cref="T:System.Data.Common.DbCommand"/>
@@ -4142,11 +4144,6 @@
             Creates and returns a <see cref="T:Npgsql.NpgsqlCommand"/> object associated with the <see cref="T:Npgsql.NpgsqlConnection"/>.
             </summary>
             <returns>A <see cref="T:Npgsql.NpgsqlCommand"/> object.</returns>
-        </member>
-        <member name="P:Npgsql.NpgsqlConnection.CachedBatch">
-            <summary>
-            A cached batch handed out by <see cref="M:Npgsql.NpgsqlConnection.CreateBatch" />, which is returned when disposed. Useful for reducing allocations.
-            </summary>
         </member>
         <member name="M:Npgsql.NpgsqlConnection.CreateBatch">
             <summary>
@@ -4811,12 +4808,12 @@
         </member>
         <member name="P:Npgsql.NpgsqlConnectionStringBuilder.Username">
             <summary>
-            The username to connect with. Not required if using GSS/SSPI/Kerberos.
+            The username to connect with. Not required if using IntegratedSecurity.
             </summary>
         </member>
         <member name="P:Npgsql.NpgsqlConnectionStringBuilder.Password">
             <summary>
-            The password to connect with. Not required if using GSS/SSPI/Kerberos.
+            The password to connect with. Not required if using IntegratedSecurity.
             </summary>
         </member>
         <member name="P:Npgsql.NpgsqlConnectionStringBuilder.Passfile">
@@ -4888,6 +4885,11 @@
             <summary>
             Whether to check the certificate revocation list during authentication.
             False by default.
+            </summary>
+        </member>
+        <member name="P:Npgsql.NpgsqlConnectionStringBuilder.IntegratedSecurity">
+            <summary>
+            Whether to use Windows integrated security to log in.
             </summary>
         </member>
         <member name="P:Npgsql.NpgsqlConnectionStringBuilder.KerberosServiceName">
@@ -5112,11 +5114,6 @@
         <member name="P:Npgsql.NpgsqlConnectionStringBuilder.ServerCompatibilityMode">
             <summary>
             A compatibility mode for special PostgreSQL server types.
-            </summary>
-        </member>
-        <member name="P:Npgsql.NpgsqlConnectionStringBuilder.IntegratedSecurity">
-            <summary>
-            Whether to use Windows integrated security to log in.
             </summary>
         </member>
         <member name="P:Npgsql.NpgsqlConnectionStringBuilder.ConvertInfinityDateTime">
@@ -5876,6 +5873,13 @@
             <param name="ordinal">The zero-based column ordinal.</param>
             <returns>The value of the specified column.</returns>
         </member>
+        <member name="M:Npgsql.NpgsqlDataReader.GetProviderSpecificValue(System.Int32)">
+            <summary>
+            Gets the value of the specified column as an instance of <see cref="T:System.Object"/>.
+            </summary>
+            <param name="ordinal">The zero-based column ordinal.</param>
+            <returns>The value of the specified column.</returns>
+        </member>
         <member name="P:Npgsql.NpgsqlDataReader.Item(System.String)">
             <summary>
             Gets the value of the specified column as an instance of <see cref="T:System.Object"/>.
@@ -5939,6 +5943,20 @@
             </summary>
             <param name="ordinal">The zero-based column ordinal.</param>
             <returns>The data type of the specified column.</returns>
+        </member>
+        <member name="M:Npgsql.NpgsqlDataReader.GetProviderSpecificFieldType(System.Int32)">
+            <summary>
+            Returns the provider-specific field type of the specified column.
+            </summary>
+            <param name="ordinal">The zero-based column ordinal.</param>
+            <returns>The Type object that describes the data type of the specified column.</returns>
+        </member>
+        <member name="M:Npgsql.NpgsqlDataReader.GetProviderSpecificValues(System.Object[])">
+            <summary>
+            Gets all provider-specific attribute columns in the collection for the current row.
+            </summary>
+            <param name="values">An array of Object into which to copy the attribute columns.</param>
+            <returns>The number of instances of <see cref="T:System.Object"/> in the array.</returns>
         </member>
         <member name="M:Npgsql.NpgsqlDataReader.GetEnumerator">
             <summary>
@@ -6061,14 +6079,8 @@
         <member name="M:Npgsql.NpgsqlDataSource.Dispose(System.Boolean)">
             <inheritdoc />
         </member>
-        <member name="M:Npgsql.NpgsqlDataSource.DisposeBase">
-            <inheritdoc cref="M:Npgsql.NpgsqlDataSource.Dispose(System.Boolean)" />
-        </member>
         <member name="M:Npgsql.NpgsqlDataSource.DisposeAsyncCore">
             <inheritdoc />
-        </member>
-        <member name="M:Npgsql.NpgsqlDataSource.DisposeAsyncBase">
-            <inheritdoc cref="M:Npgsql.NpgsqlDataSource.DisposeAsyncCore" />
         </member>
         <member name="T:Npgsql.NpgsqlDataSourceBuilder">
             <summary>
@@ -6159,25 +6171,6 @@
             </remarks>
             <returns>The same builder instance so that multiple calls can be chained.</returns>
         </member>
-        <member name="M:Npgsql.NpgsqlDataSourceBuilder.UseRootCertificate(System.Security.Cryptography.X509Certificates.X509Certificate2)">
-            <summary>
-            Sets the <see cref="T:System.Security.Cryptography.X509Certificates.X509Certificate2" /> that will be used validate SSL certificate, received from the server.
-            </summary>
-            <param name="rootCertificate">The CA certificate.</param>
-            <returns>The same builder instance so that multiple calls can be chained.</returns>
-        </member>
-        <member name="M:Npgsql.NpgsqlDataSourceBuilder.UseRootCertificateCallback(System.Func{System.Security.Cryptography.X509Certificates.X509Certificate2})">
-            <summary>
-            Specifies a callback that will be used to validate SSL certificate, received from the server.
-            </summary>
-            <param name="rootCertificateCallback">The callback to get CA certificate.</param>
-            <returns>The same builder instance so that multiple calls can be chained.</returns>
-            <remarks>
-            This overload, which accepts a callback, is suitable for scenarios where the certificate rotates
-            and might change during the lifetime of the application.
-            When that's not the case, use the overload which directly accepts the certificate.
-            </remarks>
-        </member>
         <member name="M:Npgsql.NpgsqlDataSourceBuilder.UsePeriodicPasswordProvider(System.Func{Npgsql.NpgsqlConnectionStringBuilder,System.Threading.CancellationToken,System.Threading.Tasks.ValueTask{System.String}},System.TimeSpan,System.TimeSpan)">
             <summary>
             Configures a periodic password provider, which is automatically called by the data source at some regular interval. This is the
@@ -6202,18 +6195,6 @@
         </member>
         <member name="M:Npgsql.NpgsqlDataSourceBuilder.AddTypeResolverFactory(Npgsql.Internal.TypeHandling.TypeHandlerResolverFactory)">
             <inheritdoc />
-        </member>
-        <member name="M:Npgsql.NpgsqlDataSourceBuilder.UseSystemTextJson(System.Text.Json.JsonSerializerOptions,System.Type[],System.Type[])">
-            <summary>
-            Sets up System.Text.Json mappings for the PostgreSQL <c>json</c> and <c>jsonb</c> types.
-            </summary>
-            <param name="serializerOptions">Options to customize JSON serialization and deserialization.</param>
-            <param name="jsonbClrTypes">
-            A list of CLR types to map to PostgreSQL <c>jsonb</c> (no need to specify <see cref="F:NpgsqlTypes.NpgsqlDbType.Jsonb" />).
-            </param>
-            <param name="jsonClrTypes">
-            A list of CLR types to map to PostgreSQL <c>json</c> (no need to specify <see cref="F:NpgsqlTypes.NpgsqlDbType.Json" />).
-            </param>
         </member>
         <member name="M:Npgsql.NpgsqlDataSourceBuilder.MapEnum``1(System.String,Npgsql.INpgsqlNameTranslator)">
             <inheritdoc />
@@ -6822,6 +6803,15 @@
             <inheritdoc />
         </member>
         <member name="M:Npgsql.NpgsqlNestedDataReader.GetFieldValue``1(System.Int32)">
+            <inheritdoc />
+        </member>
+        <member name="M:Npgsql.NpgsqlNestedDataReader.GetProviderSpecificFieldType(System.Int32)">
+            <inheritdoc />
+        </member>
+        <member name="M:Npgsql.NpgsqlNestedDataReader.GetProviderSpecificValue(System.Int32)">
+            <inheritdoc />
+        </member>
+        <member name="M:Npgsql.NpgsqlNestedDataReader.GetProviderSpecificValues(System.Object[])">
             <inheritdoc />
         </member>
         <member name="M:Npgsql.NpgsqlNestedDataReader.Read">
@@ -7512,228 +7502,6 @@
         <member name="F:Npgsql.NpgsqlSchema.ReservedKeywords">
             <summary>
             List of keywords taken from PostgreSQL 9.0 reserved words documentation.
-            </summary>
-        </member>
-        <member name="T:Npgsql.NpgsqlSlimDataSourceBuilder">
-            <summary>
-            Provides a simple API for configuring and creating an <see cref="T:Npgsql.NpgsqlDataSource" />, from which database connections can be obtained.
-            </summary>
-            <remarks>
-            On this builder, various features are disabled by default; unless you're looking to save on code size (e.g. when publishing with
-            NativeAOT), use <see cref="T:Npgsql.NpgsqlDataSourceBuilder" /> instead.
-            </remarks>
-        </member>
-        <member name="P:Npgsql.NpgsqlSlimDataSourceBuilder.DefaultNameTranslator">
-            <inheritdoc />
-        </member>
-        <member name="P:Npgsql.NpgsqlSlimDataSourceBuilder.ConnectionStringBuilder">
-            <summary>
-            A connection string builder that can be used to configured the connection string on the builder.
-            </summary>
-        </member>
-        <member name="P:Npgsql.NpgsqlSlimDataSourceBuilder.ConnectionString">
-            <summary>
-            Returns the connection string, as currently configured on the builder.
-            </summary>
-        </member>
-        <member name="M:Npgsql.NpgsqlSlimDataSourceBuilder.#ctor(System.String)">
-            <summary>
-            Constructs a new <see cref="T:Npgsql.NpgsqlSlimDataSourceBuilder" />, optionally starting out from the given
-            <paramref name="connectionString"/>.
-            </summary>
-        </member>
-        <member name="M:Npgsql.NpgsqlSlimDataSourceBuilder.UseLoggerFactory(Microsoft.Extensions.Logging.ILoggerFactory)">
-            <summary>
-            Sets the <see cref="T:Microsoft.Extensions.Logging.ILoggerFactory" /> that will be used for logging.
-            </summary>
-            <param name="loggerFactory">The logger factory to be used.</param>
-            <returns>The same builder instance so that multiple calls can be chained.</returns>
-        </member>
-        <member name="M:Npgsql.NpgsqlSlimDataSourceBuilder.EnableParameterLogging(System.Boolean)">
-            <summary>
-            Enables parameters to be included in logging. This includes potentially sensitive information from data sent to PostgreSQL.
-            You should only enable this flag in development, or if you have the appropriate security measures in place based on the
-            sensitivity of this data.
-            </summary>
-            <param name="parameterLoggingEnabled">If <see langword="true" />, then sensitive data is logged.</param>
-            <returns>The same builder instance so that multiple calls can be chained.</returns>
-        </member>
-        <member name="M:Npgsql.NpgsqlSlimDataSourceBuilder.UseUserCertificateValidationCallback(System.Net.Security.RemoteCertificateValidationCallback)">
-            <summary>
-            When using SSL/TLS, this is a callback that allows customizing how the PostgreSQL-provided certificate is verified. This is an
-            advanced API, consider using <see cref="F:Npgsql.SslMode.VerifyFull" /> or <see cref="F:Npgsql.SslMode.VerifyCA" /> instead.
-            </summary>
-            <param name="userCertificateValidationCallback">The callback containing custom callback verification logic.</param>
-            <remarks>
-            <para>
-            Cannot be used in conjunction with <see cref="F:Npgsql.SslMode.Disable" />, <see cref="F:Npgsql.SslMode.VerifyCA" /> or
-            <see cref="F:Npgsql.SslMode.VerifyFull" />.
-            </para>
-            <para>
-            See <see href="https://msdn.microsoft.com/en-us/library/system.net.security.remotecertificatevalidationcallback(v=vs.110).aspx"/>.
-            </para>
-            </remarks>
-            <returns>The same builder instance so that multiple calls can be chained.</returns>
-        </member>
-        <member name="M:Npgsql.NpgsqlSlimDataSourceBuilder.UseClientCertificate(System.Security.Cryptography.X509Certificates.X509Certificate)">
-            <summary>
-            Specifies an SSL/TLS certificate which Npgsql will send to PostgreSQL for certificate-based authentication.
-            </summary>
-            <param name="clientCertificate">The client certificate to be sent to PostgreSQL when opening a connection.</param>
-            <returns>The same builder instance so that multiple calls can be chained.</returns>
-        </member>
-        <member name="M:Npgsql.NpgsqlSlimDataSourceBuilder.UseClientCertificates(System.Security.Cryptography.X509Certificates.X509CertificateCollection)">
-            <summary>
-            Specifies a collection of SSL/TLS certificates which Npgsql will send to PostgreSQL for certificate-based authentication.
-            </summary>
-            <param name="clientCertificates">The client certificate collection to be sent to PostgreSQL when opening a connection.</param>
-            <returns>The same builder instance so that multiple calls can be chained.</returns>
-        </member>
-        <member name="M:Npgsql.NpgsqlSlimDataSourceBuilder.UseClientCertificatesCallback(System.Action{System.Security.Cryptography.X509Certificates.X509CertificateCollection})">
-            <summary>
-            Specifies a callback to modify the collection of SSL/TLS client certificates which Npgsql will send to PostgreSQL for
-            certificate-based authentication. This is an advanced API, consider using <see cref="M:Npgsql.NpgsqlSlimDataSourceBuilder.UseClientCertificate(System.Security.Cryptography.X509Certificates.X509Certificate)" /> or
-            <see cref="M:Npgsql.NpgsqlSlimDataSourceBuilder.UseClientCertificates(System.Security.Cryptography.X509Certificates.X509CertificateCollection)" /> instead.
-            </summary>
-            <param name="clientCertificatesCallback">The callback to modify the client certificate collection.</param>
-            <remarks>
-            <para>
-            The callback is invoked every time a physical connection is opened, and is therefore suitable for rotating short-lived client
-            certificates. Simply make sure the certificate collection argument has the up-to-date certificate(s).
-            </para>
-            <para>
-            The callback's collection argument already includes any client certificates specified via the connection string or environment
-            variables.
-            </para>
-            </remarks>
-            <returns>The same builder instance so that multiple calls can be chained.</returns>
-        </member>
-        <member name="M:Npgsql.NpgsqlSlimDataSourceBuilder.UseRootCertificate(System.Security.Cryptography.X509Certificates.X509Certificate2)">
-            <summary>
-            Sets the <see cref="T:System.Security.Cryptography.X509Certificates.X509Certificate2" /> that will be used validate SSL certificate, received from the server.
-            </summary>
-            <param name="rootCertificate">The CA certificate.</param>
-            <returns>The same builder instance so that multiple calls can be chained.</returns>
-        </member>
-        <member name="M:Npgsql.NpgsqlSlimDataSourceBuilder.UseRootCertificateCallback(System.Func{System.Security.Cryptography.X509Certificates.X509Certificate2})">
-            <summary>
-            Specifies a callback that will be used to validate SSL certificate, received from the server.
-            </summary>
-            <param name="rootCertificateCallback">The callback to get CA certificate.</param>
-            <returns>The same builder instance so that multiple calls can be chained.</returns>
-            <remarks>
-            This overload, which accepts a callback, is suitable for scenarios where the certificate rotates
-            and might change during the lifetime of the application.
-            When that's not the case, use the overload which directly accepts the certificate.
-            </remarks>
-        </member>
-        <member name="M:Npgsql.NpgsqlSlimDataSourceBuilder.UsePeriodicPasswordProvider(System.Func{Npgsql.NpgsqlConnectionStringBuilder,System.Threading.CancellationToken,System.Threading.Tasks.ValueTask{System.String}},System.TimeSpan,System.TimeSpan)">
-            <summary>
-            Configures a periodic password provider, which is automatically called by the data source at some regular interval. This is the
-            recommended way to fetch a rotating access token.
-            </summary>
-            <param name="passwordProvider">A callback which returns the password to be sent to PostgreSQL.</param>
-            <param name="successRefreshInterval">How long to cache the password before re-invoking the callback.</param>
-            <param name="failureRefreshInterval">
-            If a password refresh attempt fails, it will be re-attempted with this interval.
-            This should typically be much lower than <paramref name="successRefreshInterval" />.
-            </param>
-            <returns>The same builder instance so that multiple calls can be chained.</returns>
-            <remarks>
-            <para>
-            The provided callback is invoked in a timer, and not when opening connections. It therefore doesn't affect opening time.
-            </para>
-            <para>
-            The provided cancellation token is only triggered when the entire data source is disposed. If you'd like to apply a timeout to the
-            token fetching, do so within the provided callback.
-            </para>
-            </remarks>
-        </member>
-        <member name="M:Npgsql.NpgsqlSlimDataSourceBuilder.AddTypeResolverFactory(Npgsql.Internal.TypeHandling.TypeHandlerResolverFactory)">
-            <inheritdoc />
-        </member>
-        <member name="M:Npgsql.NpgsqlSlimDataSourceBuilder.MapEnum``1(System.String,Npgsql.INpgsqlNameTranslator)">
-            <inheritdoc />
-        </member>
-        <member name="M:Npgsql.NpgsqlSlimDataSourceBuilder.UnmapEnum``1(System.String,Npgsql.INpgsqlNameTranslator)">
-            <inheritdoc />
-        </member>
-        <member name="M:Npgsql.NpgsqlSlimDataSourceBuilder.MapComposite``1(System.String,Npgsql.INpgsqlNameTranslator)">
-            <inheritdoc />
-        </member>
-        <member name="M:Npgsql.NpgsqlSlimDataSourceBuilder.MapComposite(System.Type,System.String,Npgsql.INpgsqlNameTranslator)">
-            <inheritdoc />
-        </member>
-        <member name="M:Npgsql.NpgsqlSlimDataSourceBuilder.UnmapComposite``1(System.String,Npgsql.INpgsqlNameTranslator)">
-            <inheritdoc />
-        </member>
-        <member name="M:Npgsql.NpgsqlSlimDataSourceBuilder.UnmapComposite(System.Type,System.String,Npgsql.INpgsqlNameTranslator)">
-            <inheritdoc />
-        </member>
-        <member name="M:Npgsql.NpgsqlSlimDataSourceBuilder.EnableRanges">
-            <summary>
-            Sets up mappings for the PostgreSQL <c>range</c> and <c>multirange</c> types.
-            </summary>
-        </member>
-        <member name="M:Npgsql.NpgsqlSlimDataSourceBuilder.UseSystemTextJson(System.Text.Json.JsonSerializerOptions,System.Type[],System.Type[])">
-            <summary>
-            Sets up System.Text.Json mappings for the PostgreSQL <c>json</c> and <c>jsonb</c> types.
-            </summary>
-            <param name="serializerOptions">Options to customize JSON serialization and deserialization.</param>
-            <param name="jsonbClrTypes">
-            A list of CLR types to map to PostgreSQL <c>jsonb</c> (no need to specify <see cref="F:NpgsqlTypes.NpgsqlDbType.Jsonb" />).
-            </param>
-            <param name="jsonClrTypes">
-            A list of CLR types to map to PostgreSQL <c>json</c> (no need to specify <see cref="F:NpgsqlTypes.NpgsqlDbType.Json" />).
-            </param>
-        </member>
-        <member name="M:Npgsql.NpgsqlSlimDataSourceBuilder.EnableRecords">
-            <summary>
-            Sets up mappings for the PostgreSQL <c>record</c> type.
-            </summary>
-        </member>
-        <member name="M:Npgsql.NpgsqlSlimDataSourceBuilder.EnableFullTextSearch">
-            <summary>
-            Sets up mappings for the PostgreSQL <c>tsquery</c> and <c>tsvector</c> types.
-            </summary>
-        </member>
-        <member name="M:Npgsql.NpgsqlSlimDataSourceBuilder.EnableEncryption">
-            <summary>
-            Enables the possibility to use TLS/SSl encryption for connections to PostgreSQL. This does not guarantee that encryption will
-            actually be used; see <see href="https://www.npgsql.org/doc/security.html"/> for more details.
-            </summary>
-        </member>
-        <member name="M:Npgsql.NpgsqlSlimDataSourceBuilder.UsePhysicalConnectionInitializer(System.Action{Npgsql.NpgsqlConnection},System.Func{Npgsql.NpgsqlConnection,System.Threading.Tasks.Task})">
-            <summary>
-            Register a connection initializer, which allows executing arbitrary commands when a physical database connection is first opened.
-            </summary>
-            <param name="connectionInitializer">
-            A synchronous connection initialization lambda, which will be called from <see cref="M:Npgsql.NpgsqlConnection.Open" /> when a new physical
-            connection is opened.
-            </param>
-            <param name="connectionInitializerAsync">
-            An asynchronous connection initialization lambda, which will be called from
-            <see cref="M:Npgsql.NpgsqlConnection.OpenAsync(System.Threading.CancellationToken)" /> when a new physical connection is opened.
-            </param>
-            <remarks>
-            If an initializer is registered, both sync and async versions must be provided. If you do not use sync APIs in your code, simply
-            throw <see cref="T:System.NotSupportedException" />, which would also catch accidental cases of sync opening.
-            </remarks>
-            <remarks>
-            Take care that the setting you apply in the initializer does not get reverted when the connection is returned to the pool, since
-            Npgsql sends <c>DISCARD ALL</c> by default. The <see cref="P:Npgsql.NpgsqlConnectionStringBuilder.NoResetOnClose" /> option can be used to
-            turn this off.
-            </remarks>
-            <returns>The same builder instance so that multiple calls can be chained.</returns>
-        </member>
-        <member name="M:Npgsql.NpgsqlSlimDataSourceBuilder.Build">
-            <summary>
-            Builds and returns an <see cref="T:Npgsql.NpgsqlDataSource" /> which is ready for use.
-            </summary>
-        </member>
-        <member name="M:Npgsql.NpgsqlSlimDataSourceBuilder.BuildMultiHost">
-            <summary>
-            Builds and returns a <see cref="T:Npgsql.NpgsqlMultiHostDataSource" /> which is ready for use for load-balancing and failover scenarios.
             </summary>
         </member>
         <member name="T:Npgsql.NpgsqlTracingOptions">
@@ -10797,6 +10565,13 @@
             <remarks>
             Source: <see href="https://github.com/postgres/postgres/blob/master/src/include/catalog/pg_type.dat" />
             </remarks>
+        </member>
+        <member name="M:Npgsql.TypeMapping.TypeMapper.ResolveByOID(System.UInt32)">
+            <summary>
+            Looks up a type handler by its PostgreSQL type's OID.
+            </summary>
+            <param name="oid">A PostgreSQL type OID</param>
+            <returns>A type handler that can be used to encode and decode values.</returns>
         </member>
         <member name="T:Npgsql.Util.NpgsqlTimeout">
             <summary>

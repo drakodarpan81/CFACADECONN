@@ -40,3 +40,4 @@ D:\Proyectos\Proyectos\LespControl\Prueba\CFACADECONN\obj\Release\CFACADECONN.cs
 D:\Proyectos\Proyectos\LespControl\Prueba\CFACADECONN\obj\Release\CFACADECONN.csproj.CopyComplete
 D:\Proyectos\Proyectos\LespControl\Prueba\CFACADECONN\obj\Release\CFACADECONN.dll
 D:\Proyectos\Proyectos\LespControl\Prueba\CFACADECONN\obj\Release\CFACADECONN.pdb
+D:\Proyectos\Proyectos\LespControl\Prueba\CFACADECONN\bin\Release\CFACADEFUN.dll.config
